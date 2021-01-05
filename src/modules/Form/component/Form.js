@@ -87,11 +87,11 @@ export class Form extends Component {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <FormLabel component="legend" error={discountTypeError}>Discount</FormLabel>
+                                <FormLabel component="legend" error={discountTypeError}>Discount Type</FormLabel>
                                 <RadioGroup row value={discountType} onChange={this.handleChange} name="discount" >
                                     <FormControlLabel value="free" control={<Radio color="primary" />} label="Free" />
                                     <FormControlLabel value="discount" control={<Radio color="primary" />} label="Discount" />
-                                    <FormControlLabel value=" noDiscount" control={<Radio color="primary" />} label="No Discount" />
+                                    <FormControlLabel value="noDiscount" control={<Radio color="primary" />} label="No Discount" />
                                 </RadioGroup>
                                 <FormHelperText>{discountTypeError && 'Please select discount type'}</FormHelperText>
                             </Grid>
@@ -200,28 +200,39 @@ export class Form extends Component {
             eventName, description, venue, price, discountType,
             eventNameError, descriptionError, venueError, priceError, discountTypeError,
         } = this.state;
-        if(eventName === '' || eventNameError){
+        if (eventName === '' || eventNameError) {
             eNameError = true;
         }
-        if(description === '' || descriptionError){
+        if (description === '' || descriptionError) {
             dError = true;
         }
-        if(venue === '' || venueError){
+        if (venue === '' || venueError) {
             vError = true;
         }
-        if(price === '' || priceError){
+        if (price === '' || priceError) {
             pError = true;
         }
-        if(discountType === '' || discountTypeError){
+        if (discountType === '' || discountTypeError) {
             dTypeError = true;
         }
-        this.setState({
-            eventNameError: eNameError,
-            descriptionError: dError,
-            venueError: vError,
-            priceError: pError,
-            discountTypeError: dTypeError,
-        });
+        if (eNameError || dError || vError || pError || dTypeError) {
+            this.setState({
+                eventNameError: eNameError,
+                descriptionError: dError,
+                venueError: vError,
+                priceError: pError,
+                discountTypeError: dTypeError,
+            });
+        } else {
+            const event = {
+                eventName: eventName,
+                description: description,
+                venue: venue,
+                price: price,
+                discountType: discountType,
+            }
+            this.props.addData(event);
+        }
     }
 
 }

@@ -1,0 +1,15 @@
+#circular-progress-div,.no-data {
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    width: 100%;
+}
+
+.event-button {
+    text-align: center;
+    margin: 25px auto;
+}
+
+.margin-cards {
+    margin-top: 30px;
+}
