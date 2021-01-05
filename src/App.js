@@ -3,17 +3,19 @@ import { createBrowserHistory } from 'history';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './state_management/store';
-import Form from './modules/Form/Form';
+import EventContainer from './modules/Event/container/EventContainer';
+import FormContainer from './modules/Form/container/FormContainer';
 
 function App() {
   const history = createBrowserHistory();
-  const path = () => (<Redirect to="/form" />);
+  const path = () => (<Redirect to="/events" />);
   return (
     <Provider store={store}>
       <BrowserRouter history={history}>
         <Switch>
           <Route path="/" exact={true} render={path} />
-          <Route path="/form" exact={true} component={Form} />
+          <Route path="/events" exact={true} component={EventContainer} />
+          <Route path="/form" exact={true} component={FormContainer} />
         </Switch>
       </BrowserRouter>
     </Provider>
