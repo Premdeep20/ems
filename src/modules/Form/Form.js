@@ -9,6 +9,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 export class Form extends Component {
     state = {
@@ -17,17 +18,23 @@ export class Form extends Component {
         venue: '',
         price: '',
         discountType: '',
+        eventNameError: false,
+        descriptionError: false,
+        venueError: false,
+        priceError: false,
+        discountTypeError: false,
     }
     render() {
         const { classes } = this.props;
-        const { eventName, description, venue, price, discountType } = this.state;
+        const {
+            eventName, description, venue, price, discountType,
+            eventNameError, descriptionError, venueError, priceError, discountTypeError,
+        } = this.state;
         return (
             <>
                 <main className={classes.layout}>
                     <Paper className={classes.paper}>
-                        <Typography variant="h6" gutterBottom>
-                            Create Event
-                </Typography>
+                        <Typography variant="h6" gutterBottom>Create Event</Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <TextField
@@ -37,6 +44,8 @@ export class Form extends Component {
                                     fullWidth
                                     value={eventName}
                                     onChange={this.changeEventName}
+                                    error={eventNameError}
+                                    helperText={eventNameError && 'Please fill valid event name'}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -48,6 +57,8 @@ export class Form extends Component {
                                     multiline
                                     value={description}
                                     onChange={this.changeDescription}
+                                    error={descriptionError}
+                                    helperText={descriptionError && 'Please fill valid description'}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -59,6 +70,8 @@ export class Form extends Component {
                                     multiline
                                     value={venue}
                                     onChange={this.changeVenue}
+                                    error={venueError}
+                                    helperText={venueError && 'Please fill valid venue'}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -69,15 +82,18 @@ export class Form extends Component {
                                     fullWidth
                                     value={price}
                                     onChange={this.changePrice}
+                                    error={priceError}
+                                    helperText={priceError && 'Please fill valid price'}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <FormLabel component="legend" >Discount</FormLabel>
+                                <FormLabel component="legend" error={discountTypeError}>Discount</FormLabel>
                                 <RadioGroup row value={discountType} onChange={this.handleChange} name="discount" >
                                     <FormControlLabel value="free" control={<Radio color="primary" />} label="Free" />
                                     <FormControlLabel value="discount" control={<Radio color="primary" />} label="Discount" />
                                     <FormControlLabel value=" noDiscount" control={<Radio color="primary" />} label="No Discount" />
                                 </RadioGroup>
+                                <FormHelperText>{discountTypeError && 'Please select discount type'}</FormHelperText>
                             </Grid>
                         </Grid>
                         <div
@@ -88,15 +104,15 @@ export class Form extends Component {
                                 className={classes.button}
                             >
                                 Clear
-                        </Button>
+                            </Button>
                             <Button
                                 variant="contained"
                                 color="primary"
-                                // onClick={handleNext}
+                                onClick={this.handleSubmit}
                                 className={classes.button}
                             >
                                 Submit
-                    </Button>
+                            </Button>
                         </div>
                     </Paper>
                 </main>
@@ -105,33 +121,57 @@ export class Form extends Component {
     }
 
     changeEventName = (event) => {
+        let error = false;
+        if (event.target.value.trim() === '') {
+            error = true;
+        }
         this.setState({
             eventName: event.target.value,
+            eventNameError: error,
         });
     }
 
     changeDescription = (event) => {
+        let error = false;
+        if (event.target.value.trim() === '') {
+            error = true;
+        }
         this.setState({
             description: event.target.value,
+            descriptionError: error,
         });
     }
 
     changeVenue = (event) => {
+        let error = false;
+        if (event.target.value.trim() === '') {
+            error = true;
+        }
         this.setState({
             venue: event.target.value,
+            venueError: error,
         });
     }
 
     changePrice = (event) => {
+        let error;
+        let val = Number(event.target.value);
+        if (val > 0) {
+            error = false;
+        } else {
+            val = '';
+            error = true;
+        }
         this.setState({
-            price: event.target.value,
+            price: val,
+            priceError: error,
         });
     }
 
     handleChange = (event) => {
-        console.log(event.target.value);
         this.setState({
             discountType: event.target.value,
+            discountTypeError: false,
         });
     }
 
@@ -142,7 +182,46 @@ export class Form extends Component {
             venue: '',
             price: '',
             discountType: '',
-        })
+            eventNameError: false,
+            descriptionError: false,
+            venueError: false,
+            priceError: false,
+            discountTypeError: false,
+        });
+    }
+
+    handleSubmit = () => {
+        let eNameError;
+        let dError;
+        let vError;
+        let pError;
+        let dTypeError;
+        const {
+            eventName, description, venue, price, discountType,
+            eventNameError, descriptionError, venueError, priceError, discountTypeError,
+        } = this.state;
+        if(eventName === '' || eventNameError){
+            eNameError = true;
+        }
+        if(description === '' || descriptionError){
+            dError = true;
+        }
+        if(venue === '' || venueError){
+            vError = true;
+        }
+        if(price === '' || priceError){
+            pError = true;
+        }
+        if(discountType === '' || discountTypeError){
+            dTypeError = true;
+        }
+        this.setState({
+            eventNameError: eNameError,
+            descriptionError: dError,
+            venueError: vError,
+            priceError: pError,
+            discountTypeError: dTypeError,
+        });
     }
 
 }
